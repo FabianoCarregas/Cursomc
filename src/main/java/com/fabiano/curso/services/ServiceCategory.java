@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.fabiano.curso.domain.Category;
 import com.fabiano.curso.repositories.RepositoryCategory;
+import com.fabiano.curso.services.exception.ObjectNotFoundException;
 
 @Service
 public class ServiceCategory {
@@ -15,9 +16,13 @@ public class ServiceCategory {
 	private RepositoryCategory repo;
 	
 	
-	public Category buscar(Integer id) {
+	public Category find(Integer id) {
 		Optional<Category>obj = repo.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Category.class.getName()));
+		
+		
+				
 		
 		
 	}
