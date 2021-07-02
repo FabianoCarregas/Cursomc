@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.fabiano.curso.domain.Address;
 import com.fabiano.curso.domain.Category;
 import com.fabiano.curso.domain.City;
+import com.fabiano.curso.domain.Client;
 import com.fabiano.curso.domain.Product;
 import com.fabiano.curso.domain.State;
+import com.fabiano.curso.domain.enums.ClientType;
+import com.fabiano.curso.repositories.RepositoryAddress;
 import com.fabiano.curso.repositories.RepositoryCategory;
 import com.fabiano.curso.repositories.RepositoryCity;
+import com.fabiano.curso.repositories.RepositoryClient;
 import com.fabiano.curso.repositories.RepositoryProduct;
 import com.fabiano.curso.repositories.RepositoryState;
 
@@ -27,6 +32,10 @@ public class CursomcApplication implements CommandLineRunner {
 	private RepositoryState repositoryState; 
 	@Autowired
 	private RepositoryCity repositoryCity;
+	@Autowired
+	private RepositoryClient repositoryClient;
+	@Autowired
+	private RepositoryAddress repositoryAddress;
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
@@ -63,6 +72,20 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		repositoryState.saveAll(Arrays.asList(st1, st2));
 		repositoryCity.saveAll(Arrays.asList(c1, c2, c3));
+		
+		Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "32435465", ClientType.PESSOAFISICA);
+		
+		cli1.getPhones().addAll(Arrays.asList("1909980998", "198765898"));
+		
+		Address e1= new Address(null, "Rua Flores", "300", "Apto. 100", "Jardim", "232343", cli1, c1);
+		Address e2= new Address(null, "Avenida Matos", "105", "Sala 800", "Centro", "232245", cli1, c2);
+		
+		cli1.getAddress().addAll(Arrays.asList(e1, e2));
+		
+		repositoryClient.saveAll(Arrays.asList(cli1));
+		repositoryAddress.saveAll(Arrays.asList(e1,e2));
+		
+		
 		
 		
 		
