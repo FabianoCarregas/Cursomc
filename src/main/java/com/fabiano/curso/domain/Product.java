@@ -2,7 +2,9 @@ package com.fabiano.curso.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -21,8 +24,10 @@ public class Product  implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
-	private Double preço;
+	private String name;
+	private Double price;
+	
+	
 	
 	@JsonBackReference
 	@ManyToMany
@@ -32,19 +37,28 @@ public class Product  implements Serializable {
 			)
 	private List<Category> categories = new ArrayList<>();
 	
-
+	@OneToMany(mappedBy="id.product")
+	private Set<OrderItem> itens = new HashSet<>();
+	
 	public Product() {
 		
 	}
 
 
-	public Product(Integer id, String nome, Double preço) {
+	public Product(Integer id, String name, Double price) {
 		super();
 		this.id = id;
-		this.nome = nome;
-		this.preço = preço;
+		this.name = name;
+		this.price = price;
 	}
 
+	public List<Tb_Order> getTb_order(){
+		List<Tb_Order> list = new ArrayList<>();
+		for (OrderItem x : itens) {
+			list.add(x.getOrder());
+		}
+		return list;
+	}
 
 	public Integer getId() {
 		return id;
@@ -57,22 +71,22 @@ public class Product  implements Serializable {
 
 
 	public String getNome() {
-		return nome;
+		return name;
 	}
 
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNome(String name) {
+		this.name = name;
 	}
 
 
 	public Double getPreço() {
-		return preço;
+		return price;
 	}
 
 
-	public void setPreço(Double preço) {
-		this.preço = preço;
+	public void setPreço(Double price) {
+		this.price = price;
 	}
 
 
@@ -85,6 +99,16 @@ public class Product  implements Serializable {
 		this.categories = categories;
 	}
 
+
+	public Set<OrderItem> getItens() {
+		return itens;
+	}
+
+
+	public void setItens(Set<OrderItem> itens) {
+		this.itens = itens;
+	}
+	
 
 	@Override
 	public int hashCode() {
@@ -111,6 +135,7 @@ public class Product  implements Serializable {
 			return false;
 		return true;
 	}
-	
+
+
 	
 }

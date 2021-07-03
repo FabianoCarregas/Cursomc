@@ -14,10 +14,11 @@ import com.fabiano.curso.domain.CardPayment;
 import com.fabiano.curso.domain.Category;
 import com.fabiano.curso.domain.City;
 import com.fabiano.curso.domain.Client;
-import com.fabiano.curso.domain.Tb_Order;
+import com.fabiano.curso.domain.OrderItem;
 import com.fabiano.curso.domain.Payment;
 import com.fabiano.curso.domain.Product;
 import com.fabiano.curso.domain.State;
+import com.fabiano.curso.domain.Tb_Order;
 import com.fabiano.curso.domain.enums.ClientType;
 import com.fabiano.curso.domain.enums.PaymentStatus;
 import com.fabiano.curso.repositories.RepositoryAddress;
@@ -25,6 +26,7 @@ import com.fabiano.curso.repositories.RepositoryCategory;
 import com.fabiano.curso.repositories.RepositoryCity;
 import com.fabiano.curso.repositories.RepositoryClient;
 import com.fabiano.curso.repositories.RepositoryOrder;
+import com.fabiano.curso.repositories.RepositoryOrderItem;
 import com.fabiano.curso.repositories.RepositoryPayment;
 import com.fabiano.curso.repositories.RepositoryProduct;
 import com.fabiano.curso.repositories.RepositoryState;
@@ -48,6 +50,8 @@ public class CursomcApplication implements CommandLineRunner {
 	private RepositoryOrder repositoryOrder;
 	@Autowired
 	private RepositoryPayment repositoryPayment;
+	@Autowired
+	private RepositoryOrderItem repositoryOrderItem;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -113,6 +117,24 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		repositoryOrder.saveAll(Arrays.asList(ord1, ord2));
 		repositoryPayment.saveAll(Arrays.asList(pto1, pto2));
+		
+		OrderItem oi1= new OrderItem(ord1, p1, 0.00, 1, 2000.00);
+		OrderItem oi2= new OrderItem(ord1, p3, 0.00, 2, 80.00);
+		OrderItem oi3= new OrderItem(ord2, p2, 100.0, 1, 800.0);
+		
+		ord1.getItens().addAll(Arrays.asList(oi1, oi2));
+		ord2.getItens().addAll(Arrays.asList(oi2));
+		
+		p1.getItens().addAll(Arrays.asList(oi1));
+		p2.getItens().addAll(Arrays.asList(oi3));
+		p3.getItens().addAll(Arrays.asList(oi2));
+		
+		repositoryOrderItem.saveAll(Arrays.asList(oi1,oi2,oi3));
+		
+		
+		
+		
+		
 		
 		
 		
