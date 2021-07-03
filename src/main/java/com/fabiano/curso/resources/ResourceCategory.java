@@ -12,7 +12,7 @@ import com.fabiano.curso.services.ServiceCategory;
 
 
 @RestController
-@RequestMapping(value="/categorias")
+@RequestMapping(value="/categories")
 public class ResourceCategory {
 
 	@Autowired
