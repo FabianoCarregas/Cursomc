@@ -28,6 +28,7 @@ public class Client implements Serializable {
 	private String cpfOuCnpj;
 	private Integer type;
 	
+	
 	@JsonManagedReference
 	@OneToMany(mappedBy="client")
 	private List<Address> address = new ArrayList<>();
@@ -35,6 +36,10 @@ public class Client implements Serializable {
 	@ElementCollection
 	@CollectionTable(name= "TELEFONE")
 	private Set<String> phones = new HashSet<>();
+	
+	@OneToMany(mappedBy="client")
+	
+	private List<Tb_Order> orders =new ArrayList<>();
 	
 	public Client() {
 		
@@ -104,6 +109,13 @@ public class Client implements Serializable {
 	public void setPhones(Set<String> phones) {
 		this.phones = phones;
 	}
+	public List<Tb_Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Tb_Order> orders) {
+		this.orders = orders;
+	}
 
 	@Override
 	public int hashCode() {
@@ -129,6 +141,8 @@ public class Client implements Serializable {
 			return false;
 		return true;
 	}
+
+	
 	
 	
 		

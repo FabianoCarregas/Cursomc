@@ -1,5 +1,6 @@
 package com.fabiano.curso;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +9,23 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.fabiano.curso.domain.Address;
+import com.fabiano.curso.domain.BillPayment;
+import com.fabiano.curso.domain.CardPayment;
 import com.fabiano.curso.domain.Category;
 import com.fabiano.curso.domain.City;
 import com.fabiano.curso.domain.Client;
+import com.fabiano.curso.domain.Tb_Order;
+import com.fabiano.curso.domain.Payment;
 import com.fabiano.curso.domain.Product;
 import com.fabiano.curso.domain.State;
 import com.fabiano.curso.domain.enums.ClientType;
+import com.fabiano.curso.domain.enums.PaymentStatus;
 import com.fabiano.curso.repositories.RepositoryAddress;
 import com.fabiano.curso.repositories.RepositoryCategory;
 import com.fabiano.curso.repositories.RepositoryCity;
 import com.fabiano.curso.repositories.RepositoryClient;
+import com.fabiano.curso.repositories.RepositoryOrder;
+import com.fabiano.curso.repositories.RepositoryPayment;
 import com.fabiano.curso.repositories.RepositoryProduct;
 import com.fabiano.curso.repositories.RepositoryState;
 
@@ -36,6 +44,11 @@ public class CursomcApplication implements CommandLineRunner {
 	private RepositoryClient repositoryClient;
 	@Autowired
 	private RepositoryAddress repositoryAddress;
+	@Autowired
+	private RepositoryOrder repositoryOrder;
+	@Autowired
+	private RepositoryPayment repositoryPayment;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
@@ -85,9 +98,25 @@ public class CursomcApplication implements CommandLineRunner {
 		repositoryClient.saveAll(Arrays.asList(cli1));
 		repositoryAddress.saveAll(Arrays.asList(e1,e2));
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Tb_Order ord1 = new Tb_Order(null,sdf.parse("12/12/2020 12:12"), cli1, e1);
+		Tb_Order ord2 = new Tb_Order(null,sdf.parse("10/10/2020 10:10"), cli1, e2);
+		
+		Payment pto1= new CardPayment(null, PaymentStatus.QUITADO, ord1, 6);
+		ord1.setPayment(pto1);
+		
+		Payment pto2= new BillPayment(null, PaymentStatus.PEDENDE, ord2, sdf.parse("11/11/2020 11:11"), null);
+		ord2.setPayment(pto2);
+		
+		cli1.getOrders().addAll(Arrays.asList(ord1,ord2));
+		
+		repositoryOrder.saveAll(Arrays.asList(ord1, ord2));
+		repositoryPayment.saveAll(Arrays.asList(pto1, pto2));
 		
 		
 		
+	
 		
 		
 		
